@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Hostname:</strong>
+  <%= @domain.hostname %>
+</p>
+
+<p>
+  <strong>Origin ip address:</strong>
+  <%= @domain.origin_ip_address %>
+</p>
+
+<p>
+  <strong>Account:</strong>
+  <%= @domain.account_id %>
+</p>
+
+<%= link_to 'Edit', edit_account_domain_path(@account, @domain) %> |
+<%= link_to 'Back', account_domains_path %>

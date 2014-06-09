@@ -1,0 +1,67 @@
+== README
+
+* Ruby version
+ruby-2.1.2p95
+rails-4.1.2rc1
+
+* Environment Setup
+
+    -install rvm
+        $ \curl -L https://get.rvm.io | bash -s stable --ruby
+
+        (You may run into an installation issue here. If so, the following will help with
+        Homebrew setup:
+
+        $ ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+
+        Then run command to install rvm again.)
+
+    -use rvm
+        $ source /Users/Chris/.rvm/scripts/rvm
+
+    -update gems
+        $ gem update rake
+
+    -create Rails wrapper
+        $ rvm use ruby-2.1.2@rails4.1 --create
+
+    -install Rails
+        $ gem install rails
+
+    -install Public Suffix Gem
+        $ gem install public_suffix
+
+* System dependencies
+    -OSX 10.9.3
+    -RubyMine 6.3.2
+
+* Database creation
+    -Accounts
+        $ rails generate scaffold Account name:string
+
+    -Domains
+        $ rails generate scaffold Domain hostname:string origin_ip_address:string account_id:integer
+
+* Database initialization
+    -Setup DB
+        $ rake db:migrate
+
+* Deployment instructions
+    -Get missing gems
+        $ bundle install
+
+    -Start app
+        $ rails server
+
+*Using the App
+    The first page is the Accounts list. Initially, you can only add accounts. Once you add an account,
+    Show, Edit, and Destroy options become available, or you can add another account (each account name
+    can only be used once). When viewing a single account, you can view domains by clicking on 'List
+    Domains'. This page lists off the account's associated domains and their ip addresses. Click 'New
+    Domain' to add a new domain to the account. Enter a hostname (if an invalid hostname is entered,
+    the page will simply refresh). Once a domain has been created, it can be viewed, edited, or deleted
+    from the domains list, or another domain can be created for the account. If the domain is updated,
+    the ip address will reflect to match the new hostname.
+
+Please feel free to use a different markup language if you do not plan to run
+<tt>rake doc:app</tt>.
