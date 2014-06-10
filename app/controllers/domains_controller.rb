@@ -31,12 +31,11 @@ class DomainsController < ApplicationController
   # POST /domains.json
   def create
     @domain = @account.domains.new(domain_params)
-    if PublicSuffix.valid?(@domain.hostname)
-      @domain.origin_ip_address = IPSocket::getaddress(@domain.hostname)
       @domain.account_id = params[:account_id]
 
       respond_to do |format|
         if @domain.save
+          DomainsWorker.perform_async(@domain.id)
           format.html { redirect_to [@account, @domain], notice: 'Domain was successfully created.' }
           format.json { render :show, status: :created, location: @domain }
         else
@@ -44,12 +43,6 @@ class DomainsController < ApplicationController
           format.json { render json: @domain.errors, status: :unprocessable_entity }
         end
       end
-    else
-      respond_to do |format|
-        format.html { render :new }
-        format.json { render json: @domain.errors, status: 'Please enter a proper domain.' }
-      end
-    end
   end
 
   def catch_error(domain)
@@ -59,22 +52,16 @@ class DomainsController < ApplicationController
   # PATCH/PUT /domains/1
   # PATCH/PUT /domains/1.json
   def update
-    if PublicSuffix.valid?(params[:domain][:hostname])
-      @domain.origin_ip_address = IPSocket::getaddress(params[:domain][:hostname])
+    @domain.hostname = params[:domain][:hostname]
 
-      respond_to do |format|
-        if @domain.update(domain_params)
-          format.html { redirect_to [@account, @domain], notice: 'Domain was successfully updated.' }
-          format.json { render :show, status: :ok, location: @domain }
-        else
-          format.html { render :edit }
-          format.json { render json: @domain.errors, status: :unprocessable_entity }
-        end
-      end
-    else
-      respond_to do |format|
+    respond_to do |format|
+      if @domain.update(domain_params)
+        DomainsWorker.perform_async(@domain.id)
+        format.html { redirect_to [@account, @domain], notice: 'Domain was successfully updated.' }
+        format.json { render :show, status: :ok, location: @domain }
+      else
         format.html { render :edit }
-        format.json { render json: @domain.errors, status: 'Please enter a proper domain.' }
+        format.json { render json: @domain.errors, status: :unprocessable_entity }
       end
     end
   end

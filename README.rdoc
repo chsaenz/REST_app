@@ -1,8 +1,8 @@
 == README
 
 * Ruby version
-ruby-2.1.2p95
-rails-4.1.2rc1
+    -ruby-2.1.2p95
+    -rails-4.1.2rc1
 
 * Environment Setup
 
@@ -31,6 +31,9 @@ rails-4.1.2rc1
     -install Public Suffix Gem
         $ gem install public_suffix
 
+    -install redis
+        $ brew install redis
+
 * System dependencies
     -OSX 10.9.3
     -RubyMine 6.3.2
@@ -50,6 +53,12 @@ rails-4.1.2rc1
     -Get missing gems
         $ bundle install
 
+    -Start redis
+        $ redis-server /usr/local/etc/redis.conf
+
+    -Start sidekiq
+        $ bundle exec sidekiq
+
     -Start app
         $ rails server
 
@@ -60,8 +69,5 @@ rails-4.1.2rc1
     Domains'. This page lists off the account's associated domains and their ip addresses. Click 'New
     Domain' to add a new domain to the account. Enter a hostname (if an invalid hostname is entered,
     the page will simply refresh). Once a domain has been created, it can be viewed, edited, or deleted
-    from the domains list, or another domain can be created for the account. If the domain is updated,
-    the ip address will reflect to match the new hostname.
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+    from the domains list, or another domain can be created for the account. The ip address will be acquired
+    asynchronously. If the domain is updated, the ip address will reflect to match the new hostname.
